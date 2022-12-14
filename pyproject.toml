@@ -11,7 +11,8 @@ x = "os_offers.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-opensea-api = "^0.1.7"
+pyyaml = "^6.0"
+requests = "^2.28.1"
 
 
 [build-system]

@@ -1,39 +1,39 @@
-from opensea import OpenseaAPI
-from datetime import datetime, timezone
-from opensea import utils as opensea_utils
+import requests
+import yaml
+
+eth_decimals = 1000000000
+
+def fetch(address: str, threshold: int):
+    params = {
+        'receiver': address,
+        'status': 'active',
+    }
+    response = requests.get('https://ens.vision/api/offers/v1', params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        offers = data["offers"]
+        
+        for offer in offers:
+            price = offer["price_decimal"] / eth_decimals
+            if price > threshold:
+                print("Offer id", offer["_id"])
+                print("Name", offer["name"]["name"])
+                print("Price", price)
+                print("Source", offer["source"])
+                print("Status", offer["status"])
+                print("")
+    else:
+        print(response.status_code, response.reason)
+
+def load_config():
+    config = {}
+    with open('config.yaml') as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+    return config
 
 def main():
-    api = OpenseaAPI(apikey="YOUR APIKEY")
-
-    contract_address = "0x495f947276749Ce646f68AC8c248420045cb7b5e"
-    token_id = "66406747123743156841746366950152533278033835913591691491127082341586364792833"
-
-    result = api.asset(asset_contract_address=contract_address, token_id=token_id)
-    print(result)
-    # result = api.assets(owner="0xce90a7949bb78892f159f428d0dc23a8e3584d75", limit=3)
-    # result = api.contract(asset_contract_address="0x495f947276749Ce646f68AC8c248420045cb7b5e")
-    # result = api.collection(collection_slug="cryptopunks")
-    # result = api.collections(asset_owner="0xce90a7949bb78892f159f428d0dc23a8e3584d75", limit=3)
-    # result = api.collection_stats(collection_slug="cryptopunks")
-
-    # period_end = opensea_utils.datetime_utc(2021, 11, 6, 14, 30)
-    # result = api.events(
-    #     occurred_before=period_end,
-    #     limit=10,
-    #     export_file_name="events.json",
-    # )
-    # result = api.bundles(limit=2)
-
-
-    # start_at = datetime(2021, 10, 5, 3, 25, tzinfo=timezone.utc)
-    # finish_at = datetime(2021, 10, 5, 3, 20, tzinfo=timezone.utc)
-
-    # event_generator = api.events_backfill(start=start_at,
-    #                                       until=finish_at,
-    #                                       event_type="successful")
-    # for event in event_generator:
-    #     if event is not None:
-    #         print(event) # or do other things with the event data
+    config = load_config()
+    print("Config", config)
     
-if __name__ == '__main__':
-    main()
+    fetch(config["address"], config["threshold"])
