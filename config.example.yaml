@@ -1,2 +1,5 @@
 address: '0x...'
 threshold: 0.1
+telegram:
+  api-key: ''
+  chat-id: 1

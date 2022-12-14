@@ -1,30 +1,15 @@
-import requests
 import yaml
+from os_offers.fetch import fetch
+from os_offers.notify import notify_telegram
 
-eth_decimals = 1000000000
 
-def fetch(address: str, threshold: int):
-    params = {
-        'receiver': address,
-        'status': 'active',
-    }
-    response = requests.get('https://ens.vision/api/offers/v1', params=params)
+msg = "{name}\n{offer} by {maker} on {source}"
 
-    if response.status_code == 200:
-        data = response.json()
-        offers = data["offers"]
-        
-        for offer in offers:
-            price = offer["price_decimal"] / eth_decimals
-            if price > threshold:
-                print("Offer id", offer["_id"])
-                print("Name", offer["name"]["name"])
-                print("Price", price)
-                print("Source", offer["source"])
-                print("Status", offer["status"])
-                print("")
-    else:
-        print(response.status_code, response.reason)
+def get_message(name: str, offer: int, source: str, maker):
+    return msg.format(name=name, offer=offer, source=source, maker=maker)
+
+def get_decimal(price: int):
+    return price / 1000000000
 
 def load_config():
     config = {}
@@ -36,4 +21,15 @@ def main():
     config = load_config()
     print("Config", config)
     
-    fetch(config["address"], config["threshold"])
+    try:
+        offers = fetch(config["address"], config["threshold"])
+
+        for offer in offers:
+            price = get_decimal(offer["price_decimal"])
+            if price > config["threshold"] and offer["status"] == "active":
+                message = get_message(offer["name"]["name"], price, offer["source"], offer["maker"][:6])
+                notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], message)
+                print("Offer id", offer["_id"])
+                print("")
+    except Exception as e:
+        notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], e)
