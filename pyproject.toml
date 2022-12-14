@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "os-offers"
+version = "0.1.0"
+description = ""
+authors = ["kulgg <75735874+kulgg@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "os_offers"}]
+
+[tool.poetry.scripts]
+x = "os_offers.main:main"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+opensea-api = "^0.1.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
