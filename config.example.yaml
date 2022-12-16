@@ -1,5 +1,7 @@
 address: '0x...'
 threshold: 0.1
+offer_file: ''
 telegram:
   api-key: ''
   chat-id: 1
+timeout_seconds: 10
