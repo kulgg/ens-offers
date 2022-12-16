@@ -1,8 +1,8 @@
 from time import sleep
 import yaml
-from os_offers.fetch import fetch
-from os_offers.notify import notify_telegram
-from os_offers.persistence import Persistence
+from ens_offers.fetch import fetch
+from ens_offers.notify import notify_telegram
+from ens_offers.persistence import Persistence
 
 
 msg = "{name}.eth\n{offer}ETH by {maker} on {source}"

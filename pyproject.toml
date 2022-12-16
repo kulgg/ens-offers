@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "os-offers"
+name = "ens-offers"
 version = "0.1.0"
 description = ""
 authors = ["kulgg <75735874+kulgg@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "os_offers"}]
+packages = [{include = "ens_offers"}]
 
 [tool.poetry.scripts]
-x = "os_offers.main:main"
+x = "ens_offers.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
