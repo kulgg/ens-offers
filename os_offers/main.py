@@ -30,15 +30,16 @@ def main():
             offers = fetch(config["address"], config["threshold"])
 
             for offer in offers:
-                print(offer)
                 id = offer["_id"]
-                if id not in db_offers:
-                    print("new offer", id)
-                    db_offers.add(id)
-                    price = get_decimal(offer["price_decimal"])
-                    if price > config["threshold"] and offer["status"] == "active":
-                        message = get_message(offer["name"]["name"], price, offer["source"], offer["maker"][:6])
-                        notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], message)
+                if id in db_offers:
+                    continue
+
+                print("new offer", id)
+                db_offers.add(id)
+                price = get_decimal(offer["price_decimal"])
+                if price > config["threshold"] and offer["status"] == "active":
+                    message = get_message(offer["name"]["name"], price, offer["source"], offer["maker"][:6])
+                    notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], message)
                     
             db_offers = set(list(db_offers)[-1000:])
             Persistence.save_offers(config["offer_file"], db_offers)
