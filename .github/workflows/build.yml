@@ -1,0 +1,48 @@
+name: build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v3
+        name: Setup python with cached poetry environment
+        with:
+          python-version: "3.11"
+          cache: 'poetry'
+      - name: Poetry install
+        run: |
+          poetry install
+      - name: Test with pytest
+        run: |
+          poetry run pytest
+
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Deploy
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.IP }}
+  #         username: ${{ secrets.USERNAME }}
+  #         password: ${{ secrets.PASSWORD }}
+  #         script: |
+  #           cd ~/apps/ens-offers
+  #           git pull
+  #           poetry install
+  #           systemctl restart ens-offers

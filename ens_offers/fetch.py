@@ -14,3 +14,4 @@ def fetch(address: str, threshold: int):
         return offers
     else:
         print(response.status_code, response.reason)
+        raise ValueError('API responded did not respond with 200', response.status_code, response.reason)

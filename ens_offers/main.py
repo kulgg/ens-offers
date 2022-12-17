@@ -4,7 +4,6 @@ from ens_offers.fetch import fetch
 from ens_offers.notify import notify_telegram
 from ens_offers.persistence import Persistence
 
-
 msg = "{name}.eth\n{offer}ETH by {maker} on {source}"
 
 def get_message(name: str, offer: int, source: str, maker):
