@@ -40,7 +40,7 @@ def main():
                 if id in db_offers:
                     continue
 
-                logging.info("new offer %d", id)
+                logging.info("new offer %s", id)
                 db_offers.add(id)
                 price = get_decimal(offer["price_decimal"])
                 if price > config["threshold"] and offer["status"] == "active":
