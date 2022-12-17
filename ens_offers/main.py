@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 import yaml
 from ens_offers.fetch import fetch
@@ -18,15 +19,19 @@ def load_config():
         config = yaml.load(f, Loader=yaml.FullLoader)
     return config
 
+def configure_logging():
+    log_format = "%(asctime)s [%(levelname)s] %(module)s.%(funcName)s(): %(message)s"
+    logging.basicConfig(level=logging.INFO, format=log_format)
+
 def main():
     config = load_config()
-    print("Config", config)
+    logging.info(f"Config {config}")
 
     db_offers = Persistence.load_offers(config["offer_file"])
     
     try:
         while True:
-            print("Fetching")
+            logging.info("Fetching")
             offers = fetch(config["address"], config["threshold"])
 
             for offer in offers:
@@ -34,7 +39,7 @@ def main():
                 if id in db_offers:
                     continue
 
-                print("new offer", id)
+                logging.info("new offer %d", id)
                 db_offers.add(id)
                 price = get_decimal(offer["price_decimal"])
                 if price > config["threshold"] and offer["status"] == "active":
