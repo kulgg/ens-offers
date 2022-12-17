@@ -53,4 +53,4 @@ def main():
             sleep(config["timeout_seconds"])
     
     except Exception as e:
-        notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], e)
+        notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], f"Exception\n{str(e)}")
