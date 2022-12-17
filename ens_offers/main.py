@@ -25,6 +25,7 @@ def configure_logging():
 
 def main():
     config = load_config()
+    configure_logging()
     logging.info(f"Config {config}")
 
     db_offers = Persistence.load_offers(config["offer_file"])
