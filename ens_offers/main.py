@@ -1,4 +1,5 @@
 import logging
+import os
 from time import sleep
 import yaml
 from ens_offers.fetch import fetch
@@ -53,4 +54,4 @@ def main():
             sleep(config["timeout_seconds"])
     
     except Exception as e:
-        notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], f"Exception\n{str(e)}")
+        notify_telegram(config["telegram"]["api-key"], config["telegram"]["chat-id"], f"[{os.path.basename(os.getcwd())}]\nError:\n{str(e)}")
