@@ -44,5 +44,5 @@ jobs:
           script: |
             cd ~/apps/ens-offers
             git pull
-            poetry install
-            systemctl restart ens-offers
+            /home/kul/.local/bin/poetry install
+            sudo systemctl restart ens-offers 
