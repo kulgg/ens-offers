@@ -26,6 +26,7 @@ def main():
     
     try:
         while True:
+            print("Fetching")
             offers = fetch(config["address"], config["threshold"])
 
             for offer in offers:
